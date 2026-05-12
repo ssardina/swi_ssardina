@@ -1,4 +1,4 @@
-:- module(utils,
+:- module(ssardina_utils,
     [ get_datetime_str/1,
     get_datetime_str/2,
     round/3
