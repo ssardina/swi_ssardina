@@ -1,3 +1,5 @@
+:- module(timezones, [timezone/2]).
+
 % UTC-12 (43200 seconds west)
 timezone('Pacific/Baker', 43200).
 timezone('Pacific/Howland', 43200).
