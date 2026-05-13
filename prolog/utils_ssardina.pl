@@ -51,7 +51,7 @@ stamp_date_time(T, DT) :-
 %
 % If the timezone is not recognized, it falls back to using the default Offset timezone
 stamp_date_time_tz(T, DT, TZ) :-
-    timezone(TZ, Offset),
+    timezone(TZ, Offset), !,
     stamp_date_time(T, DT, Offset).
 stamp_date_time_tz(T, DT, TZ) :-
 	stamp_date_time(T, DT, TZ).
