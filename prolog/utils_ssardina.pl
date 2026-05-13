@@ -1,9 +1,11 @@
 :- module(utils_ssardina,
     [
         % DATE-TIME TOOLS
-        iso_timestamp/2,
         get_date_time/1,
         get_date_time_tz/2,
+        iso_timestamp_string_atom/2,
+        get_iso_timestamp/1,
+        get_iso_timestamp/2,
         stamp_date_time/2,
         stamp_date_time_tz/3,
         % MATH TOOLS
@@ -58,8 +60,7 @@ stamp_date_time_tz(T, DT, TZ) :-
 	stamp_date_time(T, DT, TZ).
 
 
-
-%! iso_timestamp(+Startl:str, -StartAtom:atom)
+%! iso_timestamp(+TimeISOStr:str, -TimeISOAtom:atom)
 %
 % Convert a timestamp string (e.g. "1995-01-23 09:00:00") into an
 %   ISO 8601 format atom (e.g. "1995-01-23T09:00:00") for Prolog facts.
@@ -67,24 +68,37 @@ stamp_date_time_tz(T, DT, TZ) :-
 %  SWIPL Doc on time: https://www.swi-prolog.org/pldoc/man?section=timedate
 %
 % A TimeStamp is a floating point number expressing the time in seconds since the Epoch at 1970-01-01.
-iso_timestamp(Start, StartAtom) :-      % it is already ISO!
-    parse_time(Start, _), % will also parse without the T, so we check!
-    atomic_list_concat([_Date, _Time], 'T', Start), !,
-    atom_string(StartAtom, Start).
-iso_timestamp(Start, StartISO) :-   % handles "1995-01-23 16:30:00"
-    atom_string(Start, StartStr),
-    split_string(StartStr, " ", "", [DatePart, TimePart]),
-    atomic_list_concat([DatePart, TimePart], 'T', StartISO).
+iso_timestamp_string_atom(TimeISOStr, TimeISOAtom) :-      % it is already ISO!
+    parse_time(TimeISOStr, _), % just check it is a legal datetime
+    atomic_list_concat([_Date, _Time], 'T', TimeISOStr), !,
+    atom_string(TimeISOAtom, TimeISOStr).
+iso_timestamp_string_atom(TimeISOStr, TimeISOStrISO) :-   % handles "1995-01-23 16:30:00"
+    atom_string(TimeISOStr, TimeISOStrStr),
+    split_string(TimeISOStrStr, " ", "", [DatePart, TimePart]),
+    atomic_list_concat([DatePart, TimePart], 'T', TimeISOStrISO).
 
 
+%! get_iso_timestamp(-Stamp) is det.
+%  get_iso_timestamp(-Stamp, +TimeZone) is det.
+%
+% Retrieves the current timestamp as an ISO 8601 formatted string in the timezone.
+% If no timezone is specified, it defaults to the local timezone.
+% If TimeZone is none or none(TZ), it returns the ISO timestamp without timezone information.
+%
+%  uses format_time/3 - https://www.swi-prolog.org/pldoc/man?predicate=format_time/3
+get_iso_timestamp(Stamp) :-
+    get_iso_timestamp(Stamp, local).
+get_iso_timestamp(ISO, none) :- !,
+    get_iso_timestamp(ISO, none(local)).
+get_iso_timestamp(ISO, none(TZ)) :- !,
+    get_time(Stamp),
+    stamp_date_time_tz(Stamp, DateTime, TZ),
+    format_time(atom(ISO), '%FT%T', DateTime).
+get_iso_timestamp(ISO, TZ) :-
+    get_time(Stamp),
+    stamp_date_time_tz(Stamp, DateTime, TZ),
+    format_time(atom(ISO), '%FT%T%:z', DateTime).
 
-
-get_datetime_str(S) :- get_datetime_str(S, local).
-get_datetime_str(S, TZ) :-
-    get_time(T),
-    timezone(TZ, Offset),
-    stamp_date_time(T, DT, Offset),
-    format_time(string(S), '%Y-%m-%d %H:%M:%S', DT).
 
 
 /* ****************************************************************************
