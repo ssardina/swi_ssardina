@@ -1,11 +1,25 @@
 :- module(utils_ssardina,
-    [ get_datetime_str/1,
-    get_datetime_str/2,
-    round/3
+    [
+        stamp_date_time/2,
+        stamp_date_time_tz/3,
+        get_datetime_str/1,
+        get_datetime_str/2,
+        round/3
     ]).
 
-timezone(N, N) :- number(N), !.
-timezone('Australia/Melbourne', -3600).
+:- use_module(facts/languages).  % Facts about languages
+
+
+stamp_date_time(T, DT) :-
+    stamp_date_time_tz(T, DT, local).
+
+
+stamp_date_time_tz(T, DT, TZ) :-
+    number(TZ), !,
+    stamp_date_time(T, DT, TZ).
+stamp_date_time_tz(T, DT, TZ) :-
+    timezone(TZ, Offset),
+    stamp_date_time(T, DT, Offset).
 
 get_datetime_str(S) :- get_datetime_str(S, local).
 get_datetime_str(S, TZ) :-
@@ -13,8 +27,6 @@ get_datetime_str(S, TZ) :-
     timezone(TZ, Offset),
     stamp_date_time(T, DT, Offset),
     format_time(string(S), '%Y-%m-%d %H:%M:%S', DT).
-
-
 
 
 /* ************************************************************
