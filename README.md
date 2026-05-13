@@ -7,8 +7,11 @@ This repository contains a collection of shared utilities for Prolog projects.
 Assuming SWI-Prolog is instaled, you can install this pack via CLI as follows:
 
 ```shell
-$ swipl -q -g "pack_install('https://github.com/ssardina/swi_ssardina.git',[package(swi_ssardina),interactive(false),git(true)])" -t halt
+$ swipl -q -g "pack_install('https://github.com/ssardina/swi_ssardina.git',[package(swi_ssardina),interactive(false),git(true),upgrade(true)])" -t halt
 ```
+
+> [!NOTE]
+> This will upgrade the pack if it is already installed. If you want to avoid that, set `upgrade(false)`.
 
 From inside SWIPL itself:
 
