@@ -40,6 +40,23 @@ To remove the package:
 ?- pack_remove(swi_ssardina).
 ```
 
+## Modules
+
+All modules are named with the suffix `_ssardina` to avoid name clashes with other libraries. You can load them as needed in your Prolog code via:
+
+```prolog
+?- use_module(library(xxx_ssardina)).
+```
+
+The pack contains the following modules:
+
+| Name                | Description             |
+| ------------------- | ----------------------- |
+| `utils_ssardina`    | General utilties        |
+| `datetime_ssardina` | Date and time utilities |
+| `system_ssardina`   | System utilities        |
+| `network_ssardina`  | System utilities        |
+
 ## Usage
 
 Once the pack is installed, use the utilities in your Prolog code, simply load the library:
