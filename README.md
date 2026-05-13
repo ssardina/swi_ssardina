@@ -7,7 +7,7 @@ This repository contains a collection of shared utilities for Prolog projects.
 Install the pack:
 
 ```prolog
-?- pack_install('https://github.com/ssardina/swi_ssardina').
+?- pack_install('https://github.com/ssardina/swi_ssardina.git', [package(swi_ssardina), git(true), upgrade(true)]).
 ```
 
 This will install in folder `$HOME/.local/share/swi-prolog/pack/swi_ssardina`.

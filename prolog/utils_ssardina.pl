@@ -1,6 +1,7 @@
 :- module(utils_ssardina,
     [
         % DATE-TIME TOOLS
+        iso_timestamp/2,
         get_date_time/1,
         get_date_time_tz/2,
         stamp_date_time/2,
@@ -57,6 +58,23 @@ stamp_date_time_tz(T, DT, TZ) :-
 	stamp_date_time(T, DT, TZ).
 
 
+
+%! iso_timestamp(+Startl:str, -StartAtom:atom)
+%
+% Convert a timestamp string (e.g. "1995-01-23 09:00:00") into an
+%   ISO 8601 format atom (e.g. "1995-01-23T09:00:00") for Prolog facts.
+%
+%  SWIPL Doc on time: https://www.swi-prolog.org/pldoc/man?section=timedate
+%
+% A TimeStamp is a floating point number expressing the time in seconds since the Epoch at 1970-01-01.
+iso_timestamp(Start, StartAtom) :-      % it is already ISO!
+    parse_time(Start, _), % will also parse without the T, so we check!
+    atomic_list_concat([_Date, _Time], 'T', Start), !,
+    atom_string(StartAtom, Start).
+iso_timestamp(Start, StartISO) :-   % handles "1995-01-23 16:30:00"
+    atom_string(Start, StartStr),
+    split_string(StartStr, " ", "", [DatePart, TimePart]),
+    atomic_list_concat([DatePart, TimePart], 'T', StartISO).
 
 
 
