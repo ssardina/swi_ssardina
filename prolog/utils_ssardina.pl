@@ -36,7 +36,7 @@ downcase_term(Term, _) :-
 %! round(+X:float, -R:float, +N:int) is det
 %
 % R is X rounded to N decimal places.
-round(X, R, N) :
+round(X, R, N) :-
     E is 10^N,
 	R is round(X * E) / E.
 
