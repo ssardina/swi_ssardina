@@ -108,3 +108,18 @@ round(X, R, N) :-
     E is 10^N,
 	R is round(X*E) / E.
 
+
+
+
+
+public_ip(IP) :-
+    setup_call_cleanup(
+        http_open('http://api.ipify.org', In, []),
+        read_string(In, _, IP),
+        close(In)
+    ).
+
+my_ip(IP) :-
+	gethostname(Host),
+    tcp_host_to_address(Host, ip(A,B,C,D)),
+    format(atom(IP), "~d.~d.~d.~d", [A,B,C,D]).
