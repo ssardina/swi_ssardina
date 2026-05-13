@@ -4,7 +4,13 @@ This repository contains a collection of shared utilities for Prolog projects.
 
 ## Setup
 
-Install the pack:
+Assuming SWI-Prolog is instaled, you can install this pack via CLI as follows:
+
+```shell
+$ swipl -q -g "pack_install('https://github.com/ssardina/swi_ssardina.git',[package(swi_ssardina),interactive(false),git(true)])" -t halt
+```
+
+From inside SWIPL itself:
 
 ```prolog
 ?- pack_install('https://github.com/ssardina/swi_ssardina.git', [package(swi_ssardina), git(true), upgrade(true)]).
@@ -45,4 +51,12 @@ D = date(2026, 5, 13, 14, 46, 54.307682514190674, -36000, 'AEST', false).
 ?- get_time(T), stamp_date_time_tz(T, DT, 'Australia/Melbourne').
 T = 1778647645.071011,
 DT = date(2026, 5, 13, 14, 47, 25.071011066, -36000, -, -) ;
+```
+
+To turn on debug in a module, enable it in the module scope:
+
+```shell
+?- use_module(library(system_ssardina)).
+
+?- system_ssardina:debug(debug).
 ```
